@@ -23,16 +23,6 @@ jobs:
           $v=$raw.TrimStart("v")
           echo "version=$v" >> $env:GITHUB_OUTPUT
 
-      - name: Install cargo-edit
-        run: cargo install cargo-edit
-
-      - name: Set Cargo.toml version
-        run: cargo set-version ${{ steps.version.outputs.version }}
-        working-directory: src-tauri
-
-      - name: Set package.json version
-        run: pnpm version ${{ steps.version.outputs.version }} --no-git-tag-version
-
       - uses: pnpm/action-setup@v4
         with:
           version: 9
@@ -41,6 +31,16 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
+
+      - name: Install cargo-edit
+        run: cargo install cargo-edit
+
+      - name: Set Cargo.toml version
+        run: cargo set-version --force ${{ steps.version.outputs.version }}
+        working-directory: src-tauri
+
+      - name: Set package.json version
+        run: pnpm version ${{ steps.version.outputs.version }} --no-git-tag-version
 
       - uses: dtolnay/rust-toolchain@nightly
 

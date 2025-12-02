@@ -16,13 +16,22 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Extract version from tag
+        id: version
+        shell: pwsh
         run: |
           $raw="${{ github.ref_name }}"
-          $version=$raw.TrimStart("v")
-          (Get-Content src-tauri/Cargo.toml) `
-            -replace '(?ms)(\[package\].*?version\s*=\s*")(.*?)(")', "`$1$version`$3" |
-            Set-Content src-tauri/Cargo.toml
-        shell: pwsh
+          $v=$raw.TrimStart("v")
+          echo "version=$v" >> $env:GITHUB_OUTPUT
+
+      - name: Install cargo-edit
+        run: cargo install cargo-edit
+
+      - name: Set Cargo.toml version
+        run: cargo set-version ${{ steps.version.outputs.version }}
+        working-directory: src-tauri
+
+      - name: Set package.json version
+        run: pnpm version ${{ steps.version.outputs.version }} --no-git-tag-version
 
       - uses: pnpm/action-setup@v4
         with:
@@ -46,17 +55,17 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
 
       - name: Create portable zip
+        shell: pwsh
+        working-directory: ./src-tauri/target/release/
         run: |
           $zip="Overseer_${{ github.ref_name }}_x64_en-US.zip"
           7z a -tzip -mm=Deflate $zip Overseer.exe
-        working-directory: ./src-tauri/target/release/
-        shell: pwsh
 
       - name: Generate SHA256 checksum
+        shell: pwsh
+        working-directory: ./src-tauri/target/release/
         run: |
           certutil -hashfile Overseer.exe SHA256 > Overseer_${{ github.ref_name }}_SHA256.txt
-        working-directory: ./src-tauri/target/release/
-        shell: pwsh
 
       - uses: ncipollo/release-action@v1
         with:

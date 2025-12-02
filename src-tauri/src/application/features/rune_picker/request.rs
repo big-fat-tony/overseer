@@ -1,0 +1,51 @@
+use serde_json::Value;
+use crate::domain::ports::ChampionResolverPort;
+
+pub struct RunePickRequest {
+    pub champion_id: i32,
+    pub champion_name: String,
+    pub role: String,
+}
+
+impl RunePickRequest {
+    pub async fn from_session(
+        session: &Value,
+        resolver: &dyn ChampionResolverPort,
+    ) -> Option<Self> {
+        let cell = session.get("localPlayerCellId")?.as_i64()? as i32;
+        let team = session.get("myTeam")?.as_array()?;
+
+        let player = team.iter().find(|p| {
+            p.get("cellId")
+                .and_then(|v| v.as_i64())
+                .map(|id| id as i32 == cell)
+                .unwrap_or(false)
+        })?;
+
+        let champ = player.get("championId")?.as_i64()? as i32;
+        if champ == 0 {
+            return None;
+        }
+
+        let mut role = player
+            .get("assignedPosition")
+            .and_then(|v| v.as_str())
+            .unwrap_or("")
+            .to_lowercase();
+
+        let queue = session.get("queueId")?.as_i64()? as i32;
+        if role.is_empty() && queue == 3140 {
+            role = "bottom".to_string();
+        }
+        if role.is_empty() {
+            role = "unknown".to_string();
+        }
+
+        let name = resolver.resolve_name(champ).await?;
+        Some(Self {
+            champion_id: champ,
+            champion_name: name,
+            role,
+        })
+    }
+}

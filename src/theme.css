@@ -1,0 +1,132 @@
+/* ---------- DESIGN TOKENS ---------- */
+:root {
+    /* Surfaces */
+    --bg: #0b0e12;                       /* deep blue-black */
+    --surface: #11161e;                  /* dark panel */
+    --surface-translucent: #11161ed9;    /* frosted overlay */
+
+    /* Text */
+    --text: #d7d8df;                     /* soft silver */
+    --text-muted: #9aa0ab;
+
+    /* Borders / lines */
+    --border: #1a212d;                   /* subtle metal */
+    --border-strong: #2c394d;
+
+    /* Accents */
+    --accent: #c8aa6e;                   /* LoL gold */
+    --accent-glow: #e4c67a;
+
+    /* UI Depth */
+    --radius: 10px;
+    --shadow: 0 6px 22px rgba(0,0,0,0.45);
+}
+
+/* ---------- GLOBAL ---------- */
+html, body {
+    background: radial-gradient(circle at top, #192235 0, #050711 60%, #02030a);
+    color: var(--text);
+    font-family: "Beaufort for LOL", "Lato", sans-serif; /* LoL font fallback */
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+/* Headers adopt LoL-style typography */
+h1, h2 {
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+}
+
+/* Slight arcane glow on interactive text */
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+a:hover {
+    color: var(--accent-glow);
+    text-shadow: 0 0 6px rgba(200,170,110,0.6);
+}
+
+/* Typography */
+h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.5em;
+}
+h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+p {
+    line-height: 1.55;
+}
+
+/* Links */
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+a:hover {
+    opacity: 0.75;
+}
+
+/* ---------- NAV BAR ---------- */
+.navbar {
+    background: linear-gradient(
+            to bottom,
+            rgba(17,22,30,0.9),
+            rgba(17,22,30,0.75)
+    );
+    border-bottom: 1px solid var(--border-strong);
+    padding: 14px 26px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-weight: 600;
+    letter-spacing: 0.6px;
+}
+
+
+/* ---------- MAIN CONTENT SURFACE ---------- */
+.surface {
+    background: linear-gradient(
+            to bottom right,
+            #141a23,
+            #0f131a
+    );
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    padding: 22px;
+    margin: 0 16px 16px;
+    overflow: auto;
+}
+
+/* Webkit (Chrome, Edge, Brave, Opera) */
+*::-webkit-scrollbar {
+    width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #0b0e12;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: #1f2a3b;
+    border: 2px solid #0b0e12;
+    border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: #2a3750;
+    border-color: var(--accent);
+}
+
+/* Firefox */
+* {
+    scrollbar-color: #1f2a3b #0b0e12;
+    scrollbar-width: thin;
+}

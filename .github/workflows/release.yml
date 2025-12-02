@@ -27,7 +27,7 @@ jobs:
         run: cargo install cargo-edit
 
       - name: Set Cargo.toml version
-        run: cargo set-version --force ${{ steps.version.outputs.version }}
+        run: cargo set-version ${{ steps.version.outputs.version }}
         working-directory: src-tauri
 
       - name: Set package.json version

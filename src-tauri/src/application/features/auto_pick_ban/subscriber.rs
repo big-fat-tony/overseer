@@ -123,7 +123,7 @@ fn resolve_role(s: &ChampSelectSessionPayload) -> Option<String> {
 
             if role.is_empty() {
                 if s.queueId == 3140 {
-                    return Some("bottom".into());
+                    return Some("support".into());
                 } else {
                     return None;
                 }

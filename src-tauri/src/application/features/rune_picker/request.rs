@@ -35,7 +35,7 @@ impl RunePickRequest {
 
         let queue = session.get("queueId")?.as_i64()? as i32;
         if role.is_empty() && queue == 3140 {
-            role = "bottom".to_string();
+            role = "support".to_string();
         }
         if role.is_empty() {
             role = "unknown".to_string();

@@ -4,7 +4,7 @@ use crate::domain::delay_state::DelayState;
 use crate::domain::events::{EventType, LeagueEvent};
 use crate::domain::ports::{ChampionResolverPort, LcuApiPort, LeagueEventSubscriber};
 use crate::domain::rune_page_manager::RunePageManager;
-use log::{debug, info};
+use log::{info};
 use std::sync::Arc;
 use tokio::task;
 use tokio::time::{sleep, Duration};

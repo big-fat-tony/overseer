@@ -47,7 +47,6 @@ pub fn run() {
     let (league_pub, ingame_pub, lcu_api) = init_core();
 
     tauri::Builder::default()
-        .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
         .plugin(
             tauri_plugin_log::Builder::new()

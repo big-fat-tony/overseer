@@ -3,24 +3,24 @@ use std::sync::Arc;
 
 use crate::domain::feature::{Feature, FeatureId};
 use crate::domain::ports::{
-    IngameEventPublisherPort, LeagueEventPublisherPort, LogPublisherPort, LcuApiPort,
-    ChampionResolverPort, DataDragonApiPort, HovererPort, PickerPort, BannerPort,
+    BannerPort, ChampionResolverPort, DataDragonApiPort, HovererPort, IngameEventPublisherPort,
+    LcuApiPort, LeagueEventPublisherPort, LogPublisherPort, PickerPort,
 };
 use crate::domain::rune_page_manager::RunePageManager;
 
-use crate::application::features::auto_pick_ban::feature::AutoPickBanFeature;
-use crate::application::features::league_log::feature::LeagueEventLogFeature;
-use crate::application::features::ingame_log::feature::IngameEventLogFeature;
-use crate::application::features::match_ready::feature::MatchReadyFeature;
 use crate::application::features::auto_pick_ban::champion_preferences::ChampionPreferences;
-use crate::application::features::auto_pick_ban::priority_pick_strategy::PriorityPickStrategy;
+use crate::application::features::auto_pick_ban::feature::AutoPickBanFeature;
 use crate::application::features::auto_pick_ban::priority_ban_strategy::PriorityBanStrategy;
+use crate::application::features::auto_pick_ban::priority_pick_strategy::PriorityPickStrategy;
+use crate::application::features::ingame_log::feature::IngameEventLogFeature;
+use crate::application::features::league_log::feature::LeagueEventLogFeature;
+use crate::application::features::match_ready::feature::MatchReadyFeature;
 use crate::application::features::rune_picker::feature::RunePickerFeature;
 
 use crate::adapters::outbound::data_dragon_champion_resolver::DataDragonChampionResolver;
+use crate::adapters::outbound::lcu_champion_banner::ChampionBanner;
 use crate::adapters::outbound::lcu_champion_hoverer::ChampionHoverer;
 use crate::adapters::outbound::lcu_champion_picker::ChampionPicker;
-use crate::adapters::outbound::lcu_champion_banner::ChampionBanner;
 
 use crate::domain::champ_select::ban_preferences::BanPreferences;
 use crate::domain::delay_state::DelayState;

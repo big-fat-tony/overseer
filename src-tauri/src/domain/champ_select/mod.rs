@@ -1,3 +1,3 @@
-pub mod models;
-pub mod decision;
 pub mod ban_preferences;
+pub mod decision;
+pub mod models;

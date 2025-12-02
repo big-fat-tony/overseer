@@ -1,7 +1,7 @@
+use serde_json::Value;
 use std::collections::HashMap;
 use std::str::FromStr;
 use std::sync::{Arc, Mutex};
-use serde_json::Value;
 use tauri::Wry;
 use tauri_plugin_store::Store;
 
@@ -46,8 +46,10 @@ impl FeatureManager {
 
     fn save_state(&self) {
         let active = self.active.lock().unwrap();
-        let list: Vec<Value> =
-            active.keys().map(|k| Value::String(k.to_string())).collect();
+        let list: Vec<Value> = active
+            .keys()
+            .map(|k| Value::String(k.to_string()))
+            .collect();
         self.store.set("enabled", Value::Array(list));
     }
 
@@ -70,11 +72,7 @@ impl FeatureManager {
         Ok(())
     }
 
-    fn enable(
-        &self,
-        id: FeatureId,
-        active: &mut HashMap<FeatureId, Arc<dyn Feature>>,
-    ) {
+    fn enable(&self, id: FeatureId, active: &mut HashMap<FeatureId, Arc<dyn Feature>>) {
         if active.contains_key(&id) {
             return;
         }
@@ -87,12 +85,7 @@ impl FeatureManager {
         }
     }
 
-    pub fn apply_setting_to_active(
-        &self,
-        id: FeatureId,
-        key: &str,
-        value: Value,
-    ) {
+    pub fn apply_setting_to_active(&self, id: FeatureId, key: &str, value: Value) {
         let active = self.active.lock().unwrap();
 
         if let Some(feature) = active.get(&id) {
@@ -141,16 +134,13 @@ impl FeatureManager {
         let store_key = format!("feature.{}.{}", id, key);
         log::info!("set_feature_setting({}, {})", id, store_key);
 
-        self.store.set(store_key, value.clone());     // save persistently
+        self.store.set(store_key, value.clone()); // save persistently
         self.apply_setting_to_active(id, key, value); // apply immediately
 
         Ok(())
     }
 
-    pub fn get_feature_settings(
-        &self,
-        id: FeatureId,
-    ) -> anyhow::Result<Value> {
+    pub fn get_feature_settings(&self, id: FeatureId) -> anyhow::Result<Value> {
         let prefix = format!("feature.{}.", id);
         log::info!("get_feature_settings({})", prefix);
 

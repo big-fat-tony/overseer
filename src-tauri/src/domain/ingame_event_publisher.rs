@@ -1,16 +1,14 @@
 use std::sync::{
-    Arc,
     atomic::{AtomicBool, AtomicU64, Ordering},
+    Arc,
 };
 
 use dashmap::DashMap;
 use serde_json::Value;
 
-use crate::domain::events::{LeagueEvent, EventType};
+use crate::domain::events::{EventType, LeagueEvent};
 use crate::domain::ports::{
-    IngameEventPublisherPort,
-    IngameEventSubscriber,
-    LeagueEventSubscriber,
+    IngameEventPublisherPort, IngameEventSubscriber, LeagueEventSubscriber,
 };
 
 use crate::adapters::outbound::ingame_api_client::IngameEventPoller;
@@ -84,11 +82,11 @@ impl LeagueEventSubscriber for IngameEventPublisher {
                 .unwrap_or("");
 
             match phase {
-                "Loading" | "GameStart" | "InProgress" =>
-                    self.active.store(true, Ordering::SeqCst),
+                "Loading" | "GameStart" | "InProgress" => self.active.store(true, Ordering::SeqCst),
 
-                "PreEndOfGame" | "EndOfGame" | "WaitingForStats" =>
-                    self.active.store(false, Ordering::SeqCst),
+                "PreEndOfGame" | "EndOfGame" | "WaitingForStats" => {
+                    self.active.store(false, Ordering::SeqCst)
+                }
 
                 _ => {}
             }

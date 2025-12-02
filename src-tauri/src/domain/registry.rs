@@ -26,8 +26,10 @@ impl EventRegistry {
             "/lol-champ-select/v1/session" => EventType::ChampSelectSession,
             "/riot-messaging-service/v1/message/parties/v1/notifications" => {
                 EventType::PartiesNotification
-            },
-            "/riot-messaging-service/v1/message/teambuilder/v1/tbdGameDtoV1" => EventType::TeambuilderTBDGame,
+            }
+            "/riot-messaging-service/v1/message/teambuilder/v1/tbdGameDtoV1" => {
+                EventType::TeambuilderTBDGame
+            }
             _ => EventType::Unknown,
         }
     }

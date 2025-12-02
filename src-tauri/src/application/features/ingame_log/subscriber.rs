@@ -1,8 +1,8 @@
-use std::sync::Arc;
-use serde_json::Value;
-use async_trait::async_trait;
-use crate::domain::ports::{IngameEventSubscriber, LogPublisherPort};
 use crate::domain::log_entry::LogEntry;
+use crate::domain::ports::{IngameEventSubscriber, LogPublisherPort};
+use async_trait::async_trait;
+use serde_json::Value;
+use std::sync::Arc;
 
 pub struct IngameEventLogSubscriber {
     log_pub: Arc<dyn LogPublisherPort>,

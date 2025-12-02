@@ -6,7 +6,9 @@ pub struct DelayState {
 
 impl DelayState {
     pub fn new() -> Self {
-        Self { value: AtomicU64::new(0) }
+        Self {
+            value: AtomicU64::new(0),
+        }
     }
 
     pub fn get(&self) -> u64 {

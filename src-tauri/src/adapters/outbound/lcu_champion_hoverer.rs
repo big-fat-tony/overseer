@@ -1,10 +1,10 @@
-use std::sync::Arc;
 use log::info;
+use std::sync::Arc;
 
-use crate::domain::ports::LcuApiPort;
-use crate::domain::champ_select::models::{ChampSelectSessionPayload, CsAction};
 use crate::application::features::auto_pick_ban::ban_pick_request::BanPickRequest;
-use crate::domain::ports::{PickingStrategy, HovererPort};
+use crate::domain::champ_select::models::{ChampSelectSessionPayload, CsAction};
+use crate::domain::ports::LcuApiPort;
+use crate::domain::ports::{HovererPort, PickingStrategy};
 
 pub struct ChampionHoverer<S> {
     api: Arc<dyn LcuApiPort>,
@@ -57,19 +57,20 @@ where
             "championId": cid
         });
 
-        let _ = self.api.patch(
-            &format!("/lol-champ-select/v1/session/actions/{}", action.id),
-            Some(&payload),
-        ).await;
+        let _ = self
+            .api
+            .patch(
+                &format!("/lol-champ-select/v1/session/actions/{}", action.id),
+                Some(&payload),
+            )
+            .await;
     }
 }
 
 fn find_pick_action(session: &ChampSelectSessionPayload) -> Option<&CsAction> {
     for row in &session.actions {
         for action in row {
-            if action.action_type == "pick"
-                && action.actorCellId == session.localPlayerCellId
-            {
+            if action.action_type == "pick" && action.actorCellId == session.localPlayerCellId {
                 return Some(action);
             }
         }

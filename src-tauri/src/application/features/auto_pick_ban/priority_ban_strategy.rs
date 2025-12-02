@@ -1,10 +1,10 @@
-use std::sync::Arc;
-use async_trait::async_trait;
-use log::{info, warn};
 use crate::application::features::auto_pick_ban::ban_pick_request::BanPickRequest;
 use crate::domain::champ_select::ban_preferences::BanPreferences;
-use crate::domain::champ_select::decision::{Decision, choose, no_decision};
+use crate::domain::champ_select::decision::{choose, no_decision, Decision};
 use crate::domain::ports::BanStrategy;
+use async_trait::async_trait;
+use log::{info, warn};
+use std::sync::Arc;
 
 pub struct PriorityBanStrategy {
     prefs: Arc<BanPreferences>,

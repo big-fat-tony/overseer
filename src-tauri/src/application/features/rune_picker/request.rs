@@ -1,5 +1,5 @@
-use serde_json::Value;
 use crate::domain::ports::ChampionResolverPort;
+use serde_json::Value;
 
 pub struct RunePickRequest {
     pub champion_id: i32,

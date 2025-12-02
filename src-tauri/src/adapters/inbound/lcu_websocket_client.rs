@@ -4,8 +4,8 @@ use crate::domain::lcu_socket_frame::LcuSocketFrame;
 use crate::domain::ports::LockfilePort;
 
 use base64::Engine;
-use futures_util::{SinkExt, StreamExt};
 use futures_util::future::Either;
+use futures_util::{SinkExt, StreamExt};
 use tokio::sync::oneshot;
 use tokio_tungstenite::tungstenite::client::IntoClientRequest;
 use tokio_tungstenite::{tungstenite, Connector};
@@ -66,8 +66,8 @@ impl LcuWebSocketClient {
         let raw_url = format!("wss://127.0.0.1:{}/", lf.port);
         let mut req = raw_url.into_client_request()?;
 
-        let token = base64::engine::general_purpose::STANDARD
-            .encode(format!("riot:{}", lf.password));
+        let token =
+            base64::engine::general_purpose::STANDARD.encode(format!("riot:{}", lf.password));
         req.headers_mut()
             .insert("Authorization", format!("Basic {}", token).parse()?);
 
@@ -75,7 +75,8 @@ impl LcuWebSocketClient {
         let connector = Connector::Rustls(tls);
 
         let (ws_stream, _) =
-            tokio_tungstenite::client_async_tls_with_config(req, tcp, None, Some(connector)).await?;
+            tokio_tungstenite::client_async_tls_with_config(req, tcp, None, Some(connector))
+                .await?;
 
         log::info!("[{}] Connected", self.name);
 

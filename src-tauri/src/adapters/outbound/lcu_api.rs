@@ -1,8 +1,8 @@
-use std::sync::Arc;
+use crate::domain::ports::{LcuApiPort, LockfilePort};
 use async_trait::async_trait;
 use reqwest::{Client, Response};
 use serde_json::Value;
-use crate::domain::ports::{LcuApiPort, LockfilePort};
+use std::sync::Arc;
 
 pub struct LcuApiAdapter {
     client: Client,

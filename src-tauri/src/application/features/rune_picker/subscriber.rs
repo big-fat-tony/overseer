@@ -1,13 +1,13 @@
-use std::sync::Arc;
-use tokio::time::{sleep, Duration};
-use tokio::task;
-use log::{debug, info};
-use crate::domain::events::{EventType, LeagueEvent};
-use crate::domain::ports::{LeagueEventSubscriber, LcuApiPort, ChampionResolverPort};
-use crate::domain::delay_state::DelayState;
-use crate::domain::rune_page_manager::RunePageManager;
 use crate::application::features::rune_picker::request::RunePickRequest;
 use crate::application::features::rune_picker::service::RunePickerService;
+use crate::domain::delay_state::DelayState;
+use crate::domain::events::{EventType, LeagueEvent};
+use crate::domain::ports::{ChampionResolverPort, LcuApiPort, LeagueEventSubscriber};
+use crate::domain::rune_page_manager::RunePageManager;
+use log::{debug, info};
+use std::sync::Arc;
+use tokio::task;
+use tokio::time::{sleep, Duration};
 
 pub struct RunePickerSubscriber {
     api: Arc<dyn LcuApiPort>,
@@ -23,7 +23,12 @@ impl RunePickerSubscriber {
         pages: Arc<RunePageManager>,
         resolver: Arc<dyn ChampionResolverPort>,
     ) -> Arc<Self> {
-        Arc::new(Self { api, delay, pages, resolver })
+        Arc::new(Self {
+            api,
+            delay,
+            pages,
+            resolver,
+        })
     }
 }
 

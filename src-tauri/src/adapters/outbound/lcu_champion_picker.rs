@@ -1,9 +1,9 @@
-use std::sync::Arc;
 use log::info;
+use std::sync::Arc;
 
-use crate::domain::ports::{LcuApiPort, PickerPort, PickingStrategy};
-use crate::domain::champ_select::models::{ChampSelectSessionPayload, CsAction};
 use crate::application::features::auto_pick_ban::ban_pick_request::BanPickRequest;
+use crate::domain::champ_select::models::{ChampSelectSessionPayload, CsAction};
+use crate::domain::ports::{LcuApiPort, PickerPort, PickingStrategy};
 
 pub struct ChampionPicker<S> {
     api: Arc<dyn LcuApiPort>,
@@ -21,12 +21,7 @@ impl<S> PickerPort for ChampionPicker<S>
 where
     S: PickingStrategy + 'static,
 {
-    async fn pick(
-        &self,
-        session: &ChampSelectSessionPayload,
-        action: &CsAction,
-        role: &str,
-    ) {
+    async fn pick(&self, session: &ChampSelectSessionPayload, action: &CsAction, role: &str) {
         let req = BanPickRequest::from_session(session, role);
         info!("{:?}", req);
 
@@ -50,9 +45,12 @@ where
             "completed": true
         });
 
-        let _ = self.api.patch(
-            &format!("/lol-champ-select/v1/session/actions/{}", action.id),
-            Some(&payload),
-        ).await;
+        let _ = self
+            .api
+            .patch(
+                &format!("/lol-champ-select/v1/session/actions/{}", action.id),
+                Some(&payload),
+            )
+            .await;
     }
 }

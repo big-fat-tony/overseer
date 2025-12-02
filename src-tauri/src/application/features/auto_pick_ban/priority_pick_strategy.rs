@@ -1,9 +1,9 @@
-use std::sync::Arc;
-use log::{info, warn};
 use crate::application::features::auto_pick_ban::ban_pick_request::BanPickRequest;
 use crate::application::features::auto_pick_ban::champion_preferences::ChampionPreferences;
-use crate::domain::champ_select::decision::{Decision, no_decision, choose};
+use crate::domain::champ_select::decision::{choose, no_decision, Decision};
 use crate::domain::ports::PickingStrategy;
+use log::{info, warn};
+use std::sync::Arc;
 
 pub struct PriorityPickStrategy {
     prefs: Arc<ChampionPreferences>,
@@ -21,7 +21,10 @@ impl PickingStrategy for PriorityPickStrategy {
         info!("[PriorityPickStrategy] Picking from request={:?}", request);
 
         let role_prefs = self.prefs.get_for_role(&request.role).await;
-        info!("[PriorityPickStrategy] Role={}, Prefs={:?}", request.role, role_prefs);
+        info!(
+            "[PriorityPickStrategy] Role={}, Prefs={:?}",
+            request.role, role_prefs
+        );
         info!(
             "[PriorityPickStrategy] Banned={:?}, TheirTeam={:?}, MyTeam={:?}",
             request.banned, request.their_team, request.my_team

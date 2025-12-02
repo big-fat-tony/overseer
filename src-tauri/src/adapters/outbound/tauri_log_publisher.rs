@@ -1,7 +1,7 @@
-use std::sync::Arc;
-use tauri::{AppHandle, Emitter};
 use crate::domain::log_entry::LogEntry;
 use crate::domain::ports::LogPublisherPort;
+use std::sync::Arc;
+use tauri::{AppHandle, Emitter};
 
 pub struct TauriLogPublisherAdapter {
     app: AppHandle,

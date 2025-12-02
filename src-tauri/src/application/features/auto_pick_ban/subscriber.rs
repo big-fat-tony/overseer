@@ -1,14 +1,11 @@
-use std::sync::Arc;
 use log::info;
+use std::sync::Arc;
 use tokio::task;
 
 use crate::domain::events::{EventType, LeagueEvent};
-use crate::domain::ports::{LeagueEventSubscriber, HovererPort, PickerPort, BannerPort};
+use crate::domain::ports::{BannerPort, HovererPort, LeagueEventSubscriber, PickerPort};
 
-use crate::domain::champ_select::models::{
-    ChampSelectSessionPayload,
-    CsAction,
-};
+use crate::domain::champ_select::models::{ChampSelectSessionPayload, CsAction};
 
 pub struct AutoPickBanSubscriber {
     hoverer: Arc<dyn HovererPort>,
@@ -36,10 +33,10 @@ impl LeagueEventSubscriber for AutoPickBanSubscriber {
             return;
         }
 
-
         let source = event.data.get("payload").unwrap_or(&event.data);
 
-        let Ok(session) = serde_json::from_value::<ChampSelectSessionPayload>(source.clone()) else {
+        let Ok(session) = serde_json::from_value::<ChampSelectSessionPayload>(source.clone())
+        else {
             info!("[APB] Failed to parse ChampSelectSession");
             return;
         };
@@ -118,7 +115,11 @@ fn find_active_action(s: &ChampSelectSessionPayload) -> Option<&CsAction> {
 fn resolve_role(s: &ChampSelectSessionPayload) -> Option<String> {
     for p in &s.myTeam {
         if p.cellId == s.localPlayerCellId {
-            let role = p.assignedPosition.clone().unwrap_or_default().to_lowercase();
+            let role = p
+                .assignedPosition
+                .clone()
+                .unwrap_or_default()
+                .to_lowercase();
 
             if role.is_empty() {
                 if s.queueId == 3140 {

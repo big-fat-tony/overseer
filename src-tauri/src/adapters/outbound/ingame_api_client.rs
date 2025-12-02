@@ -1,6 +1,6 @@
-use std::time::Duration;
 use reqwest::Client;
 use serde_json::Value;
+use std::time::Duration;
 
 pub struct IngameApiClient {
     client: Client,
@@ -22,7 +22,10 @@ impl IngameApiClient {
     }
 
     pub async fn fetch_events(&self, from_id: u32) -> anyhow::Result<Vec<Value>> {
-        let url = format!("{}/GetLiveclientdataEventdata?eventID={}", self.base_url, from_id);
+        let url = format!(
+            "{}/GetLiveclientdataEventdata?eventID={}",
+            self.base_url, from_id
+        );
 
         let resp = self.client.get(url).send().await?;
         let json: Value = resp.json().await?;

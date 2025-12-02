@@ -1,8 +1,8 @@
 use std::sync::Arc;
 
-use crate::domain::feature::{Feature, FeatureId};
-use crate::domain::ports::{LeagueEventPublisherPort, LeagueEventSubscriber, LcuApiPort};
 use crate::domain::delay_state::DelayState;
+use crate::domain::feature::{Feature, FeatureId};
+use crate::domain::ports::{LcuApiPort, LeagueEventPublisherPort, LeagueEventSubscriber};
 
 use crate::application::features::match_ready::subscriber::MatchReadySubscriber;
 

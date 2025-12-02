@@ -1,7 +1,7 @@
-use std::sync::{Arc, Mutex};
+use crate::application::features::ingame_log::subscriber::IngameEventLogSubscriber;
 use crate::domain::feature::{Feature, FeatureId};
 use crate::domain::ports::{IngameEventPublisherPort, IngameEventSubscriber, LogPublisherPort};
-use crate::application::features::ingame_log::subscriber::IngameEventLogSubscriber;
+use std::sync::{Arc, Mutex};
 
 pub struct IngameEventLogFeature {
     ingame_pub: Arc<dyn IngameEventPublisherPort>,

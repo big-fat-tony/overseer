@@ -21,7 +21,13 @@ impl DataDragonApiAdapter {
 impl DataDragonApiPort for DataDragonApiAdapter {
     async fn get_versions(&self) -> Result<Vec<String>> {
         let url = "https://ddragon.leagueoflegends.com/api/versions.json";
-        let resp = self.client.get(url).send().await?.json::<Vec<String>>().await?;
+        let resp = self
+            .client
+            .get(url)
+            .send()
+            .await?
+            .json::<Vec<String>>()
+            .await?;
         Ok(resp)
     }
 

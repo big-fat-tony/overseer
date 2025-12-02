@@ -20,7 +20,9 @@ impl RunePickerService {
 
         log::info!(
             "RunePickerService: Applying runes for {} ({}) [{}]",
-            name, role, champ_id
+            name,
+            role,
+            champ_id
         );
 
         self.pages

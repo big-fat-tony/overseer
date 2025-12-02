@@ -2,16 +2,16 @@ pub mod adapters;
 pub mod application;
 pub mod domain;
 
-use std::sync::Arc;
-use tauri::Manager;
-use tauri_plugin_log::{Target, TargetKind};
-use tauri_plugin_store::StoreExt;
-use crate::domain::ports::LeagueEventPublisherPort;
 use crate::application::league_lifetime_manager::LeagueLifetimeManager;
 use crate::application::tauri_commands::*;
 use crate::domain::feature_manager::FeatureManager;
 use crate::domain::feature_registry::FeatureRegistry;
+use crate::domain::ports::LeagueEventPublisherPort;
 use crate::domain::rune_page_manager::RunePageManager;
+use std::sync::Arc;
+use tauri::Manager;
+use tauri_plugin_log::{Target, TargetKind};
+use tauri_plugin_store::StoreExt;
 
 use crate::domain::ingame_event_publisher::IngameEventPublisher;
 use crate::domain::league_event_publisher::LeagueEventPublisher;
@@ -36,9 +36,8 @@ fn init_core() -> (
 
     let lockfile: Arc<dyn LockfilePort> = Arc::new(LeagueLockfileProvider::new(None));
 
-    let lcu_api = Arc::new(
-        LcuApiAdapter::new(lockfile.clone()).expect("Failed to init LCU API")
-    ) as Arc<dyn crate::domain::ports::LcuApiPort>;
+    let lcu_api = Arc::new(LcuApiAdapter::new(lockfile.clone()).expect("Failed to init LCU API"))
+        as Arc<dyn crate::domain::ports::LcuApiPort>;
 
     (league_pub, ingame_pub, lcu_api)
 }
@@ -48,10 +47,14 @@ pub fn run() {
     let (league_pub, ingame_pub, lcu_api) = init_core();
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
         .plugin(
             tauri_plugin_log::Builder::new()
-                .targets([ Target::new(TargetKind::Stdout), Target::new(TargetKind::Webview) ])
+                .targets([
+                    Target::new(TargetKind::Stdout),
+                    Target::new(TargetKind::Webview),
+                ])
                 .level(log::LevelFilter::Info)
                 .build(),
         )

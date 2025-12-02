@@ -1,9 +1,11 @@
-use std::sync::Arc;
 use crate::application::features::rune_picker::subscriber::RunePickerSubscriber;
-use crate::domain::feature::{Feature, FeatureId};
-use crate::domain::ports::{LeagueEventPublisherPort, LeagueEventSubscriber, LcuApiPort, ChampionResolverPort};
 use crate::domain::delay_state::DelayState;
+use crate::domain::feature::{Feature, FeatureId};
+use crate::domain::ports::{
+    ChampionResolverPort, LcuApiPort, LeagueEventPublisherPort, LeagueEventSubscriber,
+};
 use crate::domain::rune_page_manager::RunePageManager;
+use std::sync::Arc;
 
 pub struct RunePickerFeature {
     league_pub: Arc<dyn LeagueEventPublisherPort>,

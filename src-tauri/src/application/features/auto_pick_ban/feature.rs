@@ -1,16 +1,12 @@
-use std::collections::HashMap;
-use std::sync::Arc;
-use serde_json::Value;
 use crate::application::features::auto_pick_ban::champion_preferences::ChampionPreferences;
 use crate::domain::feature::{Feature, FeatureId};
 use crate::domain::ports::{
-    HovererPort,
+    BannerPort, ChampionResolverPort, HovererPort, LeagueEventPublisherPort, LeagueEventSubscriber,
     PickerPort,
-    BannerPort,
-    ChampionResolverPort,
-    LeagueEventPublisherPort,
-    LeagueEventSubscriber,
 };
+use serde_json::Value;
+use std::collections::HashMap;
+use std::sync::Arc;
 
 use crate::application::features::auto_pick_ban::subscriber::AutoPickBanSubscriber;
 use crate::domain::champ_select::ban_preferences::BanPreferences;
@@ -38,11 +34,8 @@ impl AutoPickBanFeature {
         ban_prefs: Arc<BanPreferences>,
         resolver: Arc<dyn ChampionResolverPort>,
     ) -> Self {
-        let subscriber = AutoPickBanSubscriber::new(
-            hoverer.clone(),
-            picker.clone(),
-            banner.clone(),
-        );
+        let subscriber =
+            AutoPickBanSubscriber::new(hoverer.clone(), picker.clone(), banner.clone());
 
         Self {
             league_pub,

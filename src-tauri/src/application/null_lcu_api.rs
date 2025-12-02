@@ -1,6 +1,6 @@
+use crate::domain::ports::LcuApiPort;
 use async_trait::async_trait;
 use serde_json::Value;
-use crate::domain::ports::LcuApiPort;
 
 pub struct NullLcuApi;
 

@@ -1,9 +1,8 @@
 use std::sync::Arc;
 
-
 use crate::domain::events::LeagueEvent;
-use crate::domain::ports::{LeagueEventSubscriber, LogPublisherPort};
 use crate::domain::log_entry::LogEntry;
+use crate::domain::ports::{LeagueEventSubscriber, LogPublisherPort};
 
 pub struct LeagueLogSubscriber {
     log_pub: Arc<dyn LogPublisherPort>,

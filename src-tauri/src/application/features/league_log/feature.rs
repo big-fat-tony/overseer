@@ -16,8 +16,7 @@ impl LeagueEventLogFeature {
         league_pub: Arc<dyn LeagueEventPublisherPort>,
         log_pub: Arc<dyn LogPublisherPort>,
     ) -> Self {
-        let subscriber: Arc<dyn LeagueEventSubscriber> =
-            LeagueLogSubscriber::new(log_pub.clone());
+        let subscriber: Arc<dyn LeagueEventSubscriber> = LeagueLogSubscriber::new(log_pub.clone());
 
         Self {
             league_pub,

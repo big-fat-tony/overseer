@@ -128,6 +128,9 @@ fn resolve_role(s: &ChampSelectSessionPayload) -> Option<String> {
                     return None;
                 }
             }
+            if (role == "utility") {
+                return Some("support".into());
+            }
 
             return Some(role);
         }

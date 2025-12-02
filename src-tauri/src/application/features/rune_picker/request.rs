@@ -32,6 +32,9 @@ impl RunePickRequest {
             .and_then(|v| v.as_str())
             .unwrap_or("")
             .to_lowercase();
+        if(role == "utility") {
+            role = "support".to_string();
+        }
 
         let queue = session.get("queueId")?.as_i64()? as i32;
         if role.is_empty() && queue == 3140 {

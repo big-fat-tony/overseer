@@ -98,14 +98,11 @@ jobs:
             }
           } | ConvertTo-Json -Depth 10
           $json | Out-File updater.json -Encoding utf8
-          echo "json<<EOF" >> $env:GITHUB_OUTPUT
-          echo $json >> $env:GITHUB_OUTPUT
-          echo "EOF" >> $env:GITHUB_OUTPUT
 
       - name: Update Gist
-        uses: exuanbo/deploy-to-gist@v1
+        uses: exuanbo/actions-deploy-gist@v1
         with:
-          TOKEN: ${{ secrets.GIST_TOKEN }}
+          token: ${{ secrets.GIST_TOKEN }}
           gist_id: ${{ secrets.GIST_ID }}
           file_path: updater.json
           gist_file_name: overseer-updater.json

@@ -71,7 +71,8 @@ pub fn run() {
             list_rune_pages,
             delete_rune_page,
             check_update,
-            install_update
+            install_update,
+            get_current_version
         ])
         .setup(move |app| {
             let lifetime = Arc::new(LeagueLifetimeManager::new(league_pub.clone()));

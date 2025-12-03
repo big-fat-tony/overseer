@@ -141,3 +141,8 @@ pub async fn install_update(
 
     Ok(())
 }
+
+#[tauri::command]
+pub fn get_current_version(app: AppHandle) -> String {
+    app.package_info().version.to_string()
+}

@@ -45,8 +45,6 @@
         align-items: center;
         gap: 8px;
         padding: 10px 16px;
-        background: #111;
-        border-bottom: 1px solid #333;
         font-size: 0.95rem;
     }
 

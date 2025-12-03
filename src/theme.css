@@ -80,7 +80,6 @@ a:hover {
             rgba(17,22,30,0.9),
             rgba(17,22,30,0.75)
     );
-    border-bottom: 1px solid var(--border-strong);
     padding: 14px 26px;
     display: flex;
     align-items: center;

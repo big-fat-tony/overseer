@@ -122,11 +122,7 @@ fn resolve_role(s: &ChampSelectSessionPayload) -> Option<String> {
                 .to_lowercase();
 
             if role.is_empty() {
-                return if s.queueId == 3140 {
-                    Some("support".into())
-                } else {
-                    None
-                }
+                return None
             }
             if role == "utility" {
                 return Some("support".into());

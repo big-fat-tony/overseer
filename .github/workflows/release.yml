@@ -85,10 +85,8 @@ jobs:
           $ver = "${{ steps.version.outputs.version }}"
           $date = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss+00:00")
           $assetUrl = "https://github.com/${{ github.repository }}/releases/download/v$ver/Overseer_${ver}_x64-setup.exe"
-
           $sigPath = "./src-tauri/target/release/bundle/nsis/Overseer_${ver}_x64-setup.exe.sig"
           $signature = Get-Content $sigPath -Raw
-
           $json = @{
             version = $ver
             pub_date = $date
@@ -99,17 +97,15 @@ jobs:
               }
             }
           } | ConvertTo-Json -Depth 10
-
           $json | Out-File updater.json -Encoding utf8
-
           echo "json<<EOF" >> $env:GITHUB_OUTPUT
           echo $json >> $env:GITHUB_OUTPUT
           echo "EOF" >> $env:GITHUB_OUTPUT
 
       - name: Update Gist
-        uses: andymckay/gh-gist@v1
+        uses: exuanbo/deploy-to-gist@v1
         with:
+          TOKEN: ${{ secrets.GIST_TOKEN }}
           gist_id: ${{ secrets.GIST_ID }}
-          token: ${{ secrets.GIST_TOKEN }}
-          filename: "overseer-updater.json"
-          content: "${{ steps.updater.outputs.json }}"
+          file_path: updater.json
+          gist_file_name: overseer-updater.json

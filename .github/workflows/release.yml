@@ -2,7 +2,7 @@ name: Release
 
 on:
   push:
-    tags: ["v*"]
+    tags: [ "v*" ]
 
 jobs:
   release:
@@ -77,3 +77,38 @@ jobs:
           body: |
             Windows-x64 installer and portable version.
             The portable version requires a WebView2 runtime.
+      - name: Prepare updater JSON
+        id: updater
+        shell: pwsh
+        run: |
+          $ver = "${{ steps.version.outputs.version }}"
+          $date = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss+00:00")
+          $assetUrl = "https://github.com/${{ github.repository }}/releases/download/v$ver/Overseer_${ver}_x64-setup.exe"
+
+          $sigPath = "./src-tauri/target/release/bundle/nsis/Overseer_${ver}_x64-setup.exe.sig"
+          $signature = Get-Content $sigPath -Raw
+
+          $json = @{
+            version = $ver
+            pub_date = $date
+            platforms = @{
+              "windows-x86_64" = @{
+                signature = $signature
+                url = $assetUrl
+              }
+            }
+          } | ConvertTo-Json -Depth 10
+
+          Set-Content -Path updater.json -Value $json
+
+      - name: Update Gist
+        uses: andymckay/gh-gist@v1
+        with:
+          gist_id: ${{ secrets.GIST_ID }}
+          token: ${{ secrets.GIST_TOKEN }}
+          filename: "overseer-updater.json"
+          content: |
+            ${{
+              steps.updater.outputs.content ||
+              join('', (Get-Content updater.json -Raw))
+            }}

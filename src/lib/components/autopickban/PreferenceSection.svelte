@@ -10,14 +10,24 @@
     const dispatch = createEventDispatcher();
 
     let items = [];
+
     $: items = data.map((name) => ({ id: name, name }));
 
     const remove = (name) => {
         dispatch("update", data.filter((d) => d !== name));
     };
 
+    const handleConsider = (event) => {
+        // keep local items in sync while dragging (for smooth preview)
+        items = event.detail.items;
+    };
+
     const handleFinalize = (event) => {
-        const next = event.detail.items.map((i) => i.id);
+        // final order from dndzone
+        items = event.detail.items;
+
+        // convert back to plain string array for the parent
+        const next = items.map((i) => i.id);
         dispatch("update", next);
     };
 </script>
@@ -37,6 +47,7 @@
             dragDisabled: false,
             dropFromOthersDisabled: true
         }}
+            on:consider={handleConsider}
             on:finalize={handleFinalize}
     >
         {#each items as item, index (item.id)}
@@ -53,7 +64,7 @@
     .section {
         display: grid;
         gap: 12px;
-        min-width: 0;          /* 🔥 allows content to shrink inside grid */
+        min-width: 0;
     }
 
     .label {
@@ -61,7 +72,7 @@
         letter-spacing: .05em;
         text-transform: uppercase;
         opacity: .65;
-        min-width: 0;          /* avoids text expanding container */
+        min-width: 0;
     }
 
     .input-wrap {
@@ -73,7 +84,7 @@
         display: flex;
         flex-direction: column;
         gap: 8px;
-        min-width: 0;          /* 🔥 prevents overflow from wide chip labels */
-        overflow-x: hidden;    /* safe fallback */
+        min-width: 0;
+        overflow-x: hidden;
     }
 </style>

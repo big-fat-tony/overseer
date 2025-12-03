@@ -4,8 +4,7 @@
     import PreferenceChip from "./PreferenceChip.svelte";
 
     export let type;
-    export let data = [];
-    export let add;   /* function passed from parent */
+    export let data = [];/* function passed from parent */
 
     const dispatch = createEventDispatcher();
 

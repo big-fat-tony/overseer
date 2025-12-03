@@ -15,10 +15,6 @@ pub struct AutoPickBanFeature {
     league_pub: Arc<dyn LeagueEventPublisherPort>,
     subscriber: Arc<dyn LeagueEventSubscriber>,
 
-    hoverer: Arc<dyn HovererPort>,
-    picker: Arc<dyn PickerPort>,
-    banner: Arc<dyn BannerPort>,
-
     pick_prefs: Arc<ChampionPreferences>,
     ban_prefs: Arc<BanPreferences>,
     resolver: Arc<dyn ChampionResolverPort>,
@@ -40,9 +36,6 @@ impl AutoPickBanFeature {
         Self {
             league_pub,
             subscriber,
-            hoverer,
-            picker,
-            banner,
             pick_prefs,
             ban_prefs,
             resolver,

@@ -44,9 +44,4 @@ impl BanPreferences {
         let mut guard = self.data.write().await;
         *guard = resolved;
     }
-
-    pub async fn set_for_role(&self, role: &str, champ_ids: Vec<i32>) {
-        let mut guard = self.data.write().await;
-        guard.insert(role.to_lowercase(), champ_ids);
-    }
 }

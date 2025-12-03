@@ -30,6 +30,18 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "createUpdaterArtifacts": true
+  },
+    "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IERENTc4MjAxMEZEOEQ4NzEKUldSeDJOZ1BBWUpYM1VsaFlrdENYSXd2dmhuU05JbTh0V3JTU3dINm5MZ1BwL09nR3AwMzk2OEkK",
+      "endpoints": [
+        "https://gist.githubusercontent.com/big-fat-tony/9fc26848c998b8a47a347a3b4109adfa/raw/"
+      ],
+      "windows": {
+        "installMode": "quiet"
+      }
+    }
   }
 }

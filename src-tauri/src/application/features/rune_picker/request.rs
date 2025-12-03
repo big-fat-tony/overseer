@@ -29,7 +29,7 @@ impl RunePickRequest {
 
         let queue = session.get("queueId")?.as_i64()? as i32;
 
-        let mut role = player
+        let role = player
             .get("assignedPosition")
             .and_then(|v| v.as_str())
             .unwrap_or("")

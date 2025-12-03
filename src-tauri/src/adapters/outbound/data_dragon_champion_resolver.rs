@@ -13,14 +13,8 @@ struct ChampionJsonData {
     #[serde(rename = "key")]
     key: String,
     name: String,
-    stats: ChampionStats,
 }
 
-#[derive(Debug, Deserialize)]
-struct ChampionStats {
-    #[serde(rename = "attackrange")]
-    attack_range: i64,
-}
 
 pub struct DataDragonChampionResolver {
     api: Arc<dyn DataDragonApiPort>,

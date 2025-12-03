@@ -45,9 +45,4 @@ impl ChampionPreferences {
         let mut g = self.data.write().await;
         *g = resolved;
     }
-
-    pub async fn set_role(&self, role: &str, champs: Vec<i32>) {
-        let mut g = self.data.write().await;
-        g.insert(role.to_lowercase(), champs);
-    }
 }

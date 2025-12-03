@@ -4,6 +4,7 @@ pub mod domain;
 
 use crate::application::league_lifetime_manager::LeagueLifetimeManager;
 use crate::application::tauri_commands::*;
+use crate::application::dev_flag::DevFlag;
 use crate::domain::feature_manager::FeatureManager;
 use crate::domain::feature_registry::FeatureRegistry;
 use crate::domain::ports::LeagueEventPublisherPort;
@@ -28,7 +29,7 @@ use crate::domain::ports::LockfilePort;
 fn init_core() -> (
     Arc<LeagueEventPublisher>,
     Arc<IngameEventPublisher>,
-    Arc<dyn crate::domain::ports::LcuApiPort>,
+    Arc<dyn domain::ports::LcuApiPort>,
 ) {
     let league_pub = Arc::new(LeagueEventPublisher::new());
     let ingame_pub = IngameEventPublisher::new();
@@ -37,7 +38,7 @@ fn init_core() -> (
     let lockfile: Arc<dyn LockfilePort> = Arc::new(LeagueLockfileProvider::new(None));
 
     let lcu_api = Arc::new(LcuApiAdapter::new(lockfile.clone()).expect("Failed to init LCU API"))
-        as Arc<dyn crate::domain::ports::LcuApiPort>;
+        as Arc<dyn domain::ports::LcuApiPort>;
 
     (league_pub, ingame_pub, lcu_api)
 }
@@ -68,11 +69,15 @@ pub fn run() {
             list_champions,
             save_rune_page,
             list_rune_pages,
-            delete_rune_page
+            delete_rune_page,
+            check_update,
+            install_update
         ])
         .setup(move |app| {
             let lifetime = Arc::new(LeagueLifetimeManager::new(league_pub.clone()));
             app.manage(lifetime.clone());
+            let is_dev = cfg!(debug_assertions);
+            app.manage(DevFlag { is_dev });
 
             tauri::async_runtime::spawn({
                 let lm = lifetime.clone();

@@ -6,7 +6,10 @@ use crate::domain::rune_page_manager::RunePageManager;
 use serde_json::Value;
 use std::str::FromStr;
 use std::sync::Arc;
-use tauri::State;
+use tauri::{AppHandle, State};
+use tauri::ipc::Channel;
+use tauri_plugin_updater::UpdaterExt;
+use crate::application::dev_flag::DevFlag;
 
 #[tauri::command]
 pub fn list_features(state: State<Arc<FeatureManager>>) -> Vec<FeatureInfo> {
@@ -71,4 +74,70 @@ pub fn list_rune_pages(state: State<Arc<RunePageManager>>) -> Vec<RunePage> {
 pub fn delete_rune_page(state: State<Arc<RunePageManager>>, id: String) -> Result<(), String> {
     log::info!("Deleting rune page {}", id);
     state.delete(&id)
+}
+
+#[derive(Clone, serde::Serialize)]
+#[serde(tag = "event", content = "data")]
+pub enum UpdateEvent {
+    Started { content_length: Option<u64> },
+    Progress { chunk_length: usize },
+    Finished,
+}
+
+#[derive(serde::Serialize)]
+pub struct UpdateInfo {
+    pub current: String,
+    pub latest: String,
+}
+
+#[tauri::command]
+pub async fn check_update(
+    app: AppHandle,
+    dev: State<'_, DevFlag>,
+) -> Result<Option<UpdateInfo>, String> {
+    if dev.is_dev {
+        return Ok(None);
+    }
+
+    let current = app.package_info().version.to_string();
+    let updater = app.updater().map_err(|e| e.to_string())?;
+    let result = updater.check().await.map_err(|e| e.to_string())?;
+
+    Ok(result.map(|u| UpdateInfo {
+        current,
+        latest: u.version,
+    }))
+}
+
+#[tauri::command]
+pub async fn install_update(
+    app: AppHandle,
+    on_event: Channel<UpdateEvent>,
+) -> Result<(), String> {
+    let updater = app.updater().map_err(|e| e.to_string())?;
+    let update = updater.check().await.map_err(|e| e.to_string())?;
+
+    let Some(update) = update else {
+        return Err("no update available".into());
+    };
+
+    let mut started = false;
+
+    update
+        .download_and_install(
+            |chunk, total| {
+                if !started {
+                    let _ = on_event.send(UpdateEvent::Started { content_length: total });
+                    started = true;
+                }
+                let _ = on_event.send(UpdateEvent::Progress { chunk_length: chunk });
+            },
+            || {
+                let _ = on_event.send(UpdateEvent::Finished);
+            },
+        )
+        .await
+        .map_err(|e| e.to_string())?;
+
+    Ok(())
 }

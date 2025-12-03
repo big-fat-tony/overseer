@@ -1,22 +1,28 @@
 <script>
-    import {initLogsListener} from "$lib/stores/logs.js"
-    import {features} from "$lib/stores/features.js"
-    import "../app.css"
-    import "../theme.css"
-
-    import Breadcrumbs from "$lib/components/Breadcrumbs.svelte"
+    import { initLogsListener } from '$lib/stores/logs.js'
+    import { features } from '$lib/stores/features.js'
+    import { update } from '$lib/stores/update.js'
+    import '../app.css'
+    import '../theme.css'
+    import Breadcrumbs from '$lib/components/Breadcrumbs.svelte'
+    import UpdateNotification from '$lib/components/UpdateNotification.svelte'
+    import UpdateProgress from '$lib/components/UpdateProgress.svelte'
 
     initLogsListener()
     features.refresh()
+    update.check()
 </script>
 
 <main>
+    <UpdateNotification />
+    <UpdateProgress />
+
     <div class="nav">
-        <Breadcrumbs/>
+        <Breadcrumbs />
     </div>
 
     <div class="surface">
-        <slot/>
+        <slot />
     </div>
 </main>
 

@@ -117,6 +117,12 @@ impl FeatureRegistry {
     }
 
     pub fn all(&self) -> Vec<Arc<dyn Feature>> {
-        self.map.values().cloned().collect()
+        let mut features: Vec<Arc<dyn Feature>> = self.map.values().cloned().collect();
+
+        features.sort_by(|a, b| {
+            a.display_name().cmp(&b.display_name())
+        });
+
+        features
     }
 }

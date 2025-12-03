@@ -27,24 +27,24 @@ impl RunePickRequest {
             return None;
         }
 
+        let queue = session.get("queueId")?.as_i64()? as i32;
+
         let mut role = player
             .get("assignedPosition")
             .and_then(|v| v.as_str())
             .unwrap_or("")
             .to_lowercase();
-        if(role == "utility") {
-            role = "support".to_string();
-        }
 
-        let queue = session.get("queueId")?.as_i64()? as i32;
-        if role.is_empty() && queue == 3140 {
-            role = "support".to_string();
-        }
-        if role.is_empty() {
-            role = "unknown".to_string();
-        }
+        let role = match role.as_str() {
+            "utility" => "support".into(),
+            "middle" => "mid".into(),
+            "" if queue == 3140 => "support".into(),
+            "" => "unknown".into(),
+            x => x.into(),
+        };
 
         let name = resolver.resolve_name(champ).await?;
+
         Some(Self {
             champion_id: champ,
             champion_name: name,

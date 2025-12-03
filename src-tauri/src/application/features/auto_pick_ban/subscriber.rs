@@ -113,24 +113,16 @@ fn find_active_action(s: &ChampSelectSessionPayload) -> Option<&CsAction> {
 }
 
 fn resolve_role(s: &ChampSelectSessionPayload) -> Option<String> {
-    for p in &s.myTeam {
-        if p.cellId == s.localPlayerCellId {
-            let role = p
-                .assignedPosition
-                .clone()
-                .unwrap_or_default()
-                .to_lowercase();
-
-            if role.is_empty() {
-                return None
+    s.myTeam
+        .iter()
+        .find(|p| p.cellId == s.localPlayerCellId)
+        .and_then(|p| {
+            let role = p.assignedPosition.clone()?.to_lowercase();
+            match role.as_str() {
+                "" => None,
+                "utility" => Some("support".into()),
+                "middle" => Some("mid".into()),
+                _ => Some(role),
             }
-            if role == "utility" {
-                return Some("support".into());
-            }
-
-            return Some(role);
-        }
-    }
-
-    None
+        })
 }
